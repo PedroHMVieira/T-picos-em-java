@@ -36,5 +36,25 @@ public class AlunoController {
         aluno.setMatricula(dto.matricula());
         return this.repository.save(aluno);
     }
+
+    @PutMapping("/{id}")
+    public Aluno update(@PathVariable Integer id,
+                        @RequestBody AlunoRequestDTO dto) {
+        Aluno aluno = this.repository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Aluno não registrado"));
+        aluno.setNome(dto.nome());
+        aluno.setEmail(dto.email());
+        aluno.setMatricula(dto.matricula());
+        return this.repository.save(aluno);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id){
+        Aluno aluno = this.repository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Aluno não registrado"));
+        this.repository.delete(aluno);
+    }
+
+
     }
 
