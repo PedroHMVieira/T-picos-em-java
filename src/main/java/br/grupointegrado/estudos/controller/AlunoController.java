@@ -4,6 +4,7 @@ import br.grupointegrado.estudos.dto.AlunoRequestDTO;
 import br.grupointegrado.estudos.model.Aluno;
 import br.grupointegrado.estudos.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,14 +19,16 @@ public class AlunoController {
     private AlunoRepository repository;
 
     @GetMapping
-    public List<Aluno> findALL(){
-        return this.repository.findAll();
+    public ResponseEntity<List<Aluno>> findALL(){
+        return ResponseEntity.ok(this.repository.findAll());
     }
 
     @GetMapping("/{id}")
-    public Aluno findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
+    public ResponseEntity<Aluno> findById(@PathVariable Integer id) {
+        Aluno aluno = this.repository.findById(id)
          .orElseThrow(()->new IllegalArgumentException("Aluno não registrado"));
+
+        return ResponseEntity.ok(aluno);
     }
 
     @PostMapping
@@ -49,10 +52,12 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
         Aluno aluno = this.repository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Aluno não registrado"));
         this.repository.delete(aluno);
+
+        return ResponseEntity.noContent().build();
     }
 
 
