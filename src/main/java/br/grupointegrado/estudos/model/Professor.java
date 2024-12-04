@@ -1,6 +1,9 @@
 package br.grupointegrado.estudos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="Professores")
@@ -21,6 +24,10 @@ public class Professor {
 
     @Column
     private String especialidade;
+
+    @OneToMany(mappedBy="professor")
+    @JsonIgnoreProperties("professor")
+    private List<Disciplina> disciplinas;
 
     public Integer getId() {
         return id;

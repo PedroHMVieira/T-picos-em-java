@@ -1,7 +1,9 @@
 package br.grupointegrado.estudos.controller;
 
 import br.grupointegrado.estudos.dto.ProfessorRequestDTO;
+import br.grupointegrado.estudos.model.Disciplina;
 import br.grupointegrado.estudos.model.Professor;
+import br.grupointegrado.estudos.repository.DisciplinaRepository;
 import br.grupointegrado.estudos.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ public class ProfessorController {
 
     @Autowired
     private ProfessorRepository repository;
+
+    private DisciplinaRepository disciplinaRepository;
 
     @GetMapping
     public ResponseEntity<List<Professor>> findALL(){
@@ -58,6 +62,17 @@ public class ProfessorController {
         this.repository.delete(professor);
 
         return ResponseEntity.noContent().build();
+    }
+
+   @PostMapping("/{id}/add-disciplina")
+   public ResponseEntity<Professor> addDisciplina(@PathVariable Integer id,
+                                                   @RequestBody Disciplina disciplina){
+       Professor professor = this.repository.findById(id)
+               .orElseThrow(()->new IllegalArgumentException("Professor não registrado"));
+
+       disciplina.setProfessor(professor);
+       this.disciplinaRepository.save(disciplina);
+       return ResponseEntity.ok(professor);
     }
 
 
