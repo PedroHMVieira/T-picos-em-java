@@ -65,6 +65,15 @@ public class DisciplinaController {
               .orElseThrow(()->new IllegalArgumentException("Disciplina não registrada"));
       disciplina.setNome(dto.nome());
       disciplina.setCodigo(dto.codigo());
+
+      Curso curso = this.cursoRepository.findById(dto.curso_id())
+              .orElseThrow(()->new IllegalArgumentException("Curso não registrado"));
+      disciplina.setCurso(curso);
+
+      Professor professor = this.professorRepository.findById(dto.professor_id())
+              .orElseThrow(()->new IllegalArgumentException("Professor não registrado"));
+      disciplina.setProfessor(professor);
+
       return this.repository.save(disciplina);
   }
 
